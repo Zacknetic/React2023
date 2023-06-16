@@ -10,6 +10,7 @@ function App() {
 
 
   //loops through the array of expenses and creates a new array of JSX elements
+
   const expenseList = expenses.map((expense) => (
     <ExpenseItem item={expense}></ExpenseItem>
   ));
