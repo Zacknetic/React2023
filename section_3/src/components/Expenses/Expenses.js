@@ -1,4 +1,4 @@
-import Card from "./Card";
+import Card from "../UI/Card";
 import ExpenseItem from "./ExpenseItem";
 import './Expenses.css';
 
@@ -10,9 +10,7 @@ const expenseItems = [
 ];
 
 const expenseList = expenseItems.map((expense) => (
-
     <ExpenseItem item={expense}></ExpenseItem>
-
 ));
 
 
@@ -26,5 +24,5 @@ export default function Expenses() {
 }
 
 
-    //loops through the array of expenses and creates a new array of JSX elements
+
 
