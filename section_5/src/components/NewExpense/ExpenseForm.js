@@ -13,15 +13,15 @@ export default function ExpenseForm(props) {
   });
 
   function titleChangeHandler(event) {
-    setUserInput({ enteredTitle: event.target.value });
+    setUserInput({ enteredTitle: event.target.value, ...userInput });
   }
 
   function amountChangeHandler(event) {
-    setUserInput({ enteredAmount: event.target.value });
+    setUserInput({ enteredAmount: event.target.value, ...userInput });
   }
 
   function dateChangeHandler(event) {
-    setUserInput({ enteredDate: event.target.value });
+    setUserInput({ enteredDate: event.target.value, ...userInput });
   }
 
   return (
