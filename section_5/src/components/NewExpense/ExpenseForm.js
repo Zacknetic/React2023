@@ -13,15 +13,26 @@ export default function ExpenseForm(props) {
   });
 
   function titleChangeHandler(event) {
-    setUserInput({ enteredTitle: event.target.value, ...userInput });
+    // setUserInput({ enteredTitle: event.target.value, ...userInput });
+    // this will not work as react schedules state updates and does not execute them immediately
+    //instead below is the correct way to do it
+    setUserInput((prevState) => {
+      return { ...prevState, enteredTitle: event.target.value };
+    });
   }
 
   function amountChangeHandler(event) {
-    setUserInput({ enteredAmount: event.target.value, ...userInput });
+    // setUserInput({ enteredAmount: event.target.value, ...userInput });
+    setUserInput((prevState) => {
+      return { ...prevState, enteredTitle: event.target.value };
+    });
   }
 
   function dateChangeHandler(event) {
-    setUserInput({ enteredDate: event.target.value, ...userInput });
+    // setUserInput({ enteredDate: event.target.value, ...userInput });
+    setUserInput((prevState) => {
+      return { ...prevState, enteredTitle: event.target.value };
+    });
   }
 
   return (
