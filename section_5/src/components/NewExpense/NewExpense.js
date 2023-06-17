@@ -1,13 +1,14 @@
 import ExpenseForm from "./ExpenseForm";
 import "./NewExpense.css";
-export default function NewExpense() {
+export default function NewExpense(props) {
+    const {onAddExpense} = props;
   const saveExpenseDataHandler = (enteredExpenseData) => {
     // here we are passing the data from the child component to the parent component
     const expenseData = {
       ...enteredExpenseData,
       id: Math.random().toString(),
     };
-    console.log(expenseData);
+    onAddExpense(expenseData);
   };
 
   return (
