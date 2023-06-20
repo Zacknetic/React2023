@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./ExpenseForm.css";
 
 export default function ExpenseForm(props) {
-    const { onSaveExpenseData } = props;
+  const { onSaveExpenseData } = props;
   // const [enteredTitle, setEnteredTitle] = useState('');
   // const [enteredAmount, setEnteredAmount] = useState('');
   // const [enteredDate, setEnteredDate] = useState('');
@@ -14,11 +14,25 @@ export default function ExpenseForm(props) {
   });
 
   function inputChangeHandler(identifier, value) {
-    setUserInput((prevState) => {
-      return { ...prevState, [identifier]: value };
-    });
+  // Adjust date to UTC if identifier is "enteredDate"
+  if (identifier === "enteredDate") {
+    
+    const localDate = new Date(value);
+    const year = localDate.getUTCFullYear();
+    const month = localDate.getUTCMonth() + 1;  // getUTCMonth() is zero-based
+    const day = localDate.getUTCDate();
+
+    // Pad month and day with leading zeros if necessary
+    const monthStr = month < 10 ? `0${month}` : `${month}`;
+    const dayStr = day < 10 ? `0${day}` : `${day}`;
+
+    value = `${year}-${monthStr}-${dayStr}`;
   }
 
+  setUserInput((prevState) => {
+    return { ...prevState, [identifier]: value };
+  });
+}
   //   function titleChangeHandler(event) {
   //     // setUserInput({ enteredTitle: event.target.value, ...userInput });
   //     // this will not work as react schedules state updates and does not execute them immediately
@@ -44,10 +58,11 @@ export default function ExpenseForm(props) {
 
   function submitHandler(event) {
     event.preventDefault(); //this prevents the default behaviour of the form which is to send a request and reload the page
+    console.log(userInput.enteredDate)
     const expenseData = {
       title: userInput.enteredTitle,
       amount: userInput.enteredAmount,
-      date: new Date(userInput.enteredDate),
+      date: userInput.enteredDate,
     };
     // props.onSaveExpenseData(expenseData);
     onSaveExpenseData(expenseData);
