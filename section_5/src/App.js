@@ -5,25 +5,43 @@ import Expenses from "./components/Expenses/Expenses";
 
 const DUMMY_EXPENSES = [
   {
-    id: "1",
-    title: "Dodger's Food",
-    amount: 94.12,
-    date: new Date(2023, 7, 14),
-  },
-  { id: "2", title: "Pressure Washer", amount: 150.49, date: new Date(2023, 2, 12) },
-  {
-    id: "3",
-    title: "Cellphone Bill",
-    amount: 150.67,
-    date: new Date(2023, 2, 28),
+    id: "21",
+    title: "Convenience Fee Service Fee",
+    amount: 12.99,
+    date: new Date(2023, 1, 15),
   },
   {
-    id: "4",
-    title: "Nintendo Switch Game",
-    amount: 55,
-    date: new Date(2023, 5, 12),
+    id: "25",
+    title: "Overdraft Fee",
+    amount: 35.00,
+    date: new Date(2023, 4, 20),
+  },
+  {
+    id: "30",
+    title: "Rent (Online Convenience Fee)",
+    amount: 5.00,
+    date: new Date(2023, 5, 1),
+  },
+  {
+    id: "31",
+    title: "Overdraft Fee",
+    amount: 35.00,
+    date: new Date(2023, 5, 2),
+  },
+  {
+    id: "32",
+    title: "Overdraft Fee",
+    amount: 35.00,
+    date: new Date(2023, 5, 2),
+  },
+  {
+    id: "33",
+    title: "Overdraft Fee",
+    amount: 35.00,
+    date: new Date(2023, 5, 3),
   },
 ];
+
 
 const App = () => {
   const [expenses, setExpenses] = useState(DUMMY_EXPENSES);
