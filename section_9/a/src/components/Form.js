@@ -1,45 +1,34 @@
 import { useState } from "react";
 
 export default function Form(props) {
-  const [enteredCurrSav, setCurrSav] = useState("");
-  const [enteredYearSav, setYearSav] = useState("");
-  const [enteredExptRet, setExptRet] = useState("");
-  const [enteredIvstDur, setIvstDur] = useState("");
-
-  const currSavChangeHandler = (event) => {
-    setCurrSav(event.target.value);
+  const initialExpenseData = {
+    currentSavings: "",
+    yearlyContribution: "",
+    expectedReturn: "",
+    duration: "",
   };
 
-  const yearSavChangeHandler = (event) => {
-    setYearSav(event.target.value);
-  };
+  const [expenseData, setExpenseData] = useState(initialExpenseData);
 
-  const exptRetChangeHandler = (event) => {
-    setExptRet(event.target.value);
-  };
-
-  const ivstDurChangeHandler = (event) => {
-    setIvstDur(event.target.value);
-  };
+  function inputChangeHandler(input, value) {
+    setExpenseData((prevState) => {
+      return { ...prevState, [input]: +value };
+    });
+  }
 
   const submitHandler = (event) => {
     event.preventDefault();
 
-    const savingsData = {
-      currSav: enteredCurrSav,
-      yearSav: enteredYearSav,
-      exptRet: enteredExptRet,
-      ivstDur: enteredIvstDur,
-    };
-
-    const yearlyData = calculateHandler(savingsData);
+    const yearlyData = calculateHandler(expenseData);
 
     props.onSaveSavingsData(yearlyData);
-    setCurrSav("");
-    setYearSav("");
-    setExptRet("");
-    setIvstDur("");
   };
+
+  function resetHandler(event) {
+    event.preventDefault();
+    setExpenseData(initialExpenseData);
+    props.onResetTable(true);
+  }
 
   const calculateHandler = (userInput) => {
     // Should be triggered when form is submitted
@@ -47,10 +36,10 @@ export default function Form(props) {
 
     const yearlyData = []; // per-year results
 
-    let currentSavings = +userInput.currSav; // feel free to change the shape of this input object!
-    const yearlyContribution = +userInput.yearSav; // as mentioned: feel free to change the shape...
-    const expectedReturn = +userInput.exptRet / 100;
-    const duration = +userInput.ivstDur;
+    let currentSavings = +userInput.currentSavings; // feel free to change the shape of this input object!
+    const yearlyContribution = +userInput.yearlyContribution; // as mentioned: feel free to change the shape...
+    const expectedReturn = +userInput.expectedReturn / 100;
+    const duration = +userInput.duration;
 
     // The below code calculates yearly results (total savings, interest etc)
     for (let i = 0; i < duration; i++) {
@@ -59,7 +48,7 @@ export default function Form(props) {
       yearlyData.push({
         // feel free to change the shape of the data pushed to the array!
         year: i + 1,
-        yearlyInterest: yearlyInterest,
+        yearlyInterest,
         savingsEndOfYear: currentSavings,
         yearlyContribution: yearlyContribution,
         totalInterest: yearlyInterest * (i + 1),
@@ -79,7 +68,10 @@ export default function Form(props) {
             min="0.01"
             step="0.01"
             id="current-savings"
-            onChange={currSavChangeHandler}
+            onChange={(event) =>
+              inputChangeHandler("currentSavings", event.target.value)
+            }
+            value={expenseData.currentSavings}
           />
         </p>
         <p>
@@ -89,7 +81,10 @@ export default function Form(props) {
             min="0.01"
             step="0.01"
             id="yearly-contribution"
-            onChange={yearSavChangeHandler}
+            onChange={(event) =>
+              inputChangeHandler("yearlyContribution", event.target.value)
+            }
+            value={expenseData.yearlyContribution}
           />
         </p>
       </div>
@@ -104,19 +99,31 @@ export default function Form(props) {
             max="100.0"
             step="0.1"
             id="expected-return"
-            onChange={exptRetChangeHandler}
+            onChange={(event) =>
+              inputChangeHandler("expectedReturn", event.target.value)
+            }
+            value={expenseData.expectedReturn}
           />
         </p>
         <p>
           <label htmlFor="duration">Investment Duration (years)</label>
-          <input type="number" min='1' step='1' id="duration" onChange={ivstDurChangeHandler} />
+          <input
+            type="number"
+            min="1"
+            step="1"
+            id="duration"
+            onChange={(event) =>
+              inputChangeHandler("duration", event.target.value)
+            }
+            value={expenseData.duration}
+          />
         </p>
       </div>
       <p className="actions">
-        <button type="reset" className="buttonAlt">
+        <button type="button" onClick={resetHandler} className="buttonAlt">
           Reset
         </button>
-        <button type="submit" className="button">
+        <button type="button" onClick={submitHandler} className="button">
           Calculate
         </button>
       </p>

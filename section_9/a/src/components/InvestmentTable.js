@@ -1,10 +1,9 @@
 import InvestmentItem from "./InvestmentItem";
 export default function InvestmentTable(props) {
-
-
-  if (props.items.length === 0) {
-    return <h2>Found no expenses.</h2>;
+  if (props.items.length === 0 || props.resetTable) {
+    return <p style={{textAlign: 'center'}}>No investment capital submitted yet.</p>;
   }
+
 
   return (
     <table className="result">
@@ -26,7 +25,6 @@ export default function InvestmentTable(props) {
             interest={yearData.yearlyInterest}
             totalInterest={yearData.totalInterest}
             amount={yearData.yearlyContribution}
-      
           />
         ))}
       </tbody>

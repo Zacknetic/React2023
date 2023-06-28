@@ -5,7 +5,7 @@ import InvestmentTable from "./components/InvestmentTable";
 
 function App() {
   const [savingsData, setSavingsData] = useState([]);
-
+  const [resetTable, setResetTable] = useState(false);
   return (
     <div>
       <header className="header">
@@ -13,8 +13,8 @@ function App() {
         <h1>Investment Calculator</h1>
       </header>
 
-      <Form onSaveSavingsData={setSavingsData}/>
-      <InvestmentTable items={savingsData}/>
+      <Form onSaveSavingsData={setSavingsData} onResetTable={setResetTable}/>
+      <InvestmentTable items={savingsData} resetTable={resetTable}/>
     </div>
   );
 }
