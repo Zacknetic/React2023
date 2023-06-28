@@ -26,17 +26,47 @@ export default function Form(props) {
     event.preventDefault();
 
     const savingsData = {
-      currSav: +enteredCurrSav,
-      yearSav: +enteredYearSav,
-      exptRet: +enteredExptRet,
-      ivstDur: +enteredIvstDur,
+      currSav: enteredCurrSav,
+      yearSav: enteredYearSav,
+      exptRet: enteredExptRet,
+      ivstDur: enteredIvstDur,
     };
 
-    props.onSaveSavingsData(savingsData);
+    const yearlyData = calculateHandler(savingsData);
+
+    props.onSaveSavingsData(yearlyData);
     setCurrSav("");
     setYearSav("");
     setExptRet("");
     setIvstDur("");
+  };
+
+  const calculateHandler = (userInput) => {
+    // Should be triggered when form is submitted
+    // You might not directly want to bind it to the submit event on the form though...
+
+    const yearlyData = []; // per-year results
+
+    let currentSavings = +userInput.currSav; // feel free to change the shape of this input object!
+    const yearlyContribution = +userInput.yearSav; // as mentioned: feel free to change the shape...
+    const expectedReturn = +userInput.exptRet / 100;
+    const duration = +userInput.ivstDur;
+
+    // The below code calculates yearly results (total savings, interest etc)
+    for (let i = 0; i < duration; i++) {
+      const yearlyInterest = currentSavings * expectedReturn;
+      currentSavings += yearlyInterest + yearlyContribution;
+      yearlyData.push({
+        // feel free to change the shape of the data pushed to the array!
+        year: i + 1,
+        yearlyInterest: yearlyInterest,
+        savingsEndOfYear: currentSavings,
+        yearlyContribution: yearlyContribution,
+        totalInterest: yearlyInterest * (i + 1),
+      });
+    }
+    // do something with yearlyData ...
+    return yearlyData;
   };
 
   return (

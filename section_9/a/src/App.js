@@ -6,12 +6,6 @@ import InvestmentTable from "./components/InvestmentTable";
 function App() {
   const [savingsData, setSavingsData] = useState([]);
 
-  const saveSavingsDataHandler = (savingsData) => {
-    setSavingsData((prevSavingsData) => {
-      return [savingsData, ...prevSavingsData];
-    });
-  };
-
   return (
     <div>
       <header className="header">
@@ -19,7 +13,7 @@ function App() {
         <h1>Investment Calculator</h1>
       </header>
 
-      <Form onSaveSavingsData={saveSavingsDataHandler}/>
+      <Form onSaveSavingsData={setSavingsData}/>
       <InvestmentTable items={savingsData}/>
     </div>
   );
