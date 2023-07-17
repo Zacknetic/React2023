@@ -7,8 +7,8 @@ export default function Header(props) {
   return (
     <Fragment>
       <header className={classes.header}>
-        <h1>Festival Meals - To Go!</h1>
-        <HeaderCartButton></HeaderCartButton>
+        <h1>美味しい祭り (Delicious Matsuri) - デリバリーサービス</h1>
+        <HeaderCartButton onClick={props.onShowCart}></HeaderCartButton>
       </header>
       <div className={classes["main-image"]}>
         <img src={mealsImage} alt="Japanese street meals."></img>
