@@ -1,7 +1,9 @@
-.cart-items {
+.cartItems {
   list-style: none;
   margin: 0;
   padding: 0;
+  max-height: 20rem;
+  overflow: scroll;
 }
 
 .total {
@@ -41,4 +43,15 @@
 .actions .button {
   background-color: #8a2b06;
   color: white;
+}
+
+.cartItem {
+  display: flex;
+  justify-content: space-between;
+}
+
+.itemDetails {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
