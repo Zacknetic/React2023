@@ -1,34 +1,50 @@
-import React from 'react';
+import React from "react";
 
-import MoviesList from './components/MoviesList';
-import './App.css';
+import MoviesList from "./components/MoviesList";
+import "./App.css";
 
-function App() {
-  const dummyMovies = [
-    {
-      id: 1,
-      title: 'Some Dummy Movie',
-      openingText: 'This is the opening text of the movie',
-      releaseDate: '2021-05-18',
-    },
-    {
-      id: 2,
-      title: 'Some Dummy Movie 2',
-      openingText: 'This is the second opening text of the movie',
-      releaseDate: '2021-05-19',
-    },
-  ];
+export default class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      movies: [],
+    };
+    this.fetchMoviesHandler = this.fetchMoviesHandler.bind(this);
+  }
 
-  return (
-    <React.Fragment>
-      <section>
-        <button>Fetch Movies</button>
-      </section>
-      <section>
-        <MoviesList movies={dummyMovies} />
-      </section>
-    </React.Fragment>
-  );
+  async fetchMoviesHandler() {
+    let jsonData;
+    try {
+      const response = await fetch("https://swapi.dev/api/films/");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      jsonData = await response.json();
+      console.log(jsonData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+    const movies = jsonData.results.map((movie) => {
+      return {
+        id: movie.episode_id,
+        title: movie.title,
+        openingText: movie.opening_crawl,
+        releaseDate: movie.release_date,
+      };
+    });
+    this.setState({ movies: movies });
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <section>
+          <button onClick={this.fetchMoviesHandler}>Fetch Movies</button>
+        </section>
+        <section>
+          <MoviesList movies={this.state.movies} />
+        </section>
+      </React.Fragment>
+    );
+  }
 }
-
-export default App;
