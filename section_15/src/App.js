@@ -2,20 +2,29 @@ import React from "react";
 import MoviesList from "./components/MoviesList";
 import "./App.css";
 
+const API_KEY = process.env.REACT_APP_API_KEY;
+
 export default class App extends React.Component {
   constructor() {
     super();
+    const userLanguage = navigator.language.split("-")[0]; // get the language part before region
+
     this.state = {
       movies: [],
       rawMovies: [], // add this to keep the raw movies data
       isLoading: false,
-      language: "en",
+      language: userLanguage || "en",
       error: null,
     };
     this.fetchMoviesHandler = this.fetchMoviesHandler.bind(this);
     this.handleLanguageChange = this.handleLanguageChange.bind(this);
   }
 
+  componentDidMount() {
+    this.fetchMoviesHandler();
+  }
+
+  //instead of useCallback, we can use bind(this) in the constructor
   async fetchMoviesHandler() {
     this.setState({ isLoading: true, error: null });
     let jsonData;
@@ -79,8 +88,7 @@ export default class App extends React.Component {
     // Translate each paragraph individually
     const translatedParagraphs = await Promise.all(
       paragraphs.map(async (paragraph) => {
-        const apiKey = "REDACTED";
-        const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${apiKey}&text=${paragraph}&lang=en-${language}`;
+        const url = `https://translate.yandex.net/api/v1.5/tr.json/translate?key=${API_KEY}&text=${paragraph}&lang=en-${language}`;
         let translatedText = paragraph;
         try {
           const response = await fetch(url);
@@ -90,8 +98,7 @@ export default class App extends React.Component {
           const data = await response.json();
           translatedText = data.text[0];
         } catch (error) {
-          console.error("Error fetching data:", error);
-          return text;
+          this.setState({ error: error.message });
         }
         return translatedText;
       })
@@ -109,10 +116,22 @@ export default class App extends React.Component {
   }
 
   render() {
+    let content = null;
+
+    if(this.state.isLoading) {
+      content = <p>Loading movie data...</p>;
+    } else if(this.state.error) {
+      content = <p>Error: {this.state.error}</p>;
+    } else if(this.state.movies.length > 0) {
+      content = <MoviesList movies={this.state.movies} />;
+    } else {
+      content = <p>Try loading some movies.</p>;
+    }
+
     return (
       <React.Fragment>
         <section>
-          <button onClick={this.fetchMoviesHandler}>Fetch Movies</button>
+          {/* <button onClick={this.fetchMoviesHandler}>Fetch Movies</button> */}
           <select
             value={this.state.language}
             onChange={this.handleLanguageChange}
@@ -126,15 +145,7 @@ export default class App extends React.Component {
           </select>
         </section>
         <section>
-          {this.state.isLoading ? (
-            <p>Loading movie data...</p>
-          ) : (
-            <MoviesList movies={this.state.movies} />
-          )}
-          {!this.state.isLoading && !this.state.error && this.state.movies.length === 0 && (
-            <p>Try loading some movies.</p>
-          )}
-          {this.state.error && <p>Error: {this.state.error}</p>}
+          {content}
         </section>
       </React.Fragment>
     );
