@@ -6,9 +6,6 @@
   border-radius: 12px;
   text-align: center;
   color: white;
-  width: 90%; /* Adjust the width for smaller screens */
-  max-width: 500px; /* Set a max-width for larger screens */
-  margin: 1rem auto; /* Centers the movie component */
 }
 
 .movie h2 {
@@ -20,16 +17,4 @@
   color: #eccf77;
   margin: 0;
   font-size: 1rem;
-}
-
-@media (min-width: 768px) {
-  .movie {
-    width: 70%; /* Adjust the width for larger screens */
-  }
-}
-
-@media (min-width: 1024px) {
-  .movie {
-    width: 50%; /* Adjust the width for even larger screens */
-  }
 }
