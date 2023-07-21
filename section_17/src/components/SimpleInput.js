@@ -10,7 +10,6 @@ const SimpleInput = (props) => {
   const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
 
   const enteredEmailIsValid = enteredEmail.trim().includes("@") && enteredEmail.trim() !== "" && enteredEmail.trim().includes(".");
-
   const emailInputIsInvalid = !enteredEmailIsValid && enteredEmailTouched;
 
   let formIsValid = false;
