@@ -18,8 +18,7 @@ export default function useInput(validateValue) {
   const reset = () => {
     setEnteredValue("");
     setIsTouched(false);
-    };
-
+  };
 
   return {
     value: enteredValue,
