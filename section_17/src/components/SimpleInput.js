@@ -1,25 +1,18 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 const SimpleInput = (props) => {
-  const nameInputRef = useRef(); // useRef returns an object with a current property which is initialized with the value null
   const [enteredName, setEnteredName] = useState("");
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
   const [enteredNameTouched, setEnteredNameTouched] = useState(false);
+
+  const enteredNameIsValid = enteredName.trim() !== "";
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
 
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
-    //should use the same source of truth for the validation as react doesn't guarantee that the state will be updated immediately
-    if (event.target.value.trim() !== "") {
-      setEnteredNameIsValid(true);
-    }
   };
 
-  const nameInputBlurHandler = (event) => {
+  const nameInputBlurHandler = () => {
     setEnteredNameTouched(true);
-
-    if (enteredName.trim() === "") {
-      setEnteredNameIsValid(false);
-    }
   };
 
   const formSubmissionHandler = (event) => {
@@ -27,24 +20,11 @@ const SimpleInput = (props) => {
 
     setEnteredNameTouched(true);
 
-    if (enteredName.trim() === "") {
-      setEnteredNameIsValid(false);
+    if (enteredNameIsValid) return;
 
-      return;
-    }
-
-    setEnteredNameIsValid(true);
-
-    console.log(enteredName);
-
-    const enteredValue = nameInputRef.current.value; // current property is a special property that always points to the DOM element that the ref is attached to
-
-    // nameInputRef.current.value = ""; // this is not the react way of updating the DOM, but it is possible. AVOID THIS!
-    console.log(enteredValue);
     setEnteredName("");
+    setEnteredNameTouched(false);
   };
-
-  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
 
   const nameInputClasses = nameInputIsInvalid
     ? "form-control invalid"
@@ -55,7 +35,6 @@ const SimpleInput = (props) => {
       <div className={nameInputClasses}>
         <label htmlFor="name">Your Name</label>
         <input
-          ref={nameInputRef}
           type="text"
           id="name"
           onChange={nameInputChangeHandler}
