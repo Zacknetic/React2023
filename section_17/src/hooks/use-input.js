@@ -1,31 +1,64 @@
-import { useState } from "react";
+import { useReducer } from 'react';
 
-export default function useInput(validateValue) {
-  const [enteredValue, setEnteredValue] = useState("");
-  const [isTouched, setIsTouched] = useState(false);
+const initialInputState = {
+  value: '',
+  isTouched: false,
+};
 
-  const valueIsValid = validateValue(enteredValue);
-  const hasError = !valueIsValid && isTouched;
+const inputStateReducer = (state, action) => {
+  switch(action.type) {
+    case 'INPUT':
+      return { ...state, [action.fieldName]: { value: action.value, isTouched: state[action.fieldName].isTouched } };
+    case 'BLUR':
+      return { ...state, [action.fieldName]: { isTouched: true, value: state[action.fieldName].value } };
+    case 'RESET':
+      return { ...state, [action.fieldName]: { isTouched: false, value: '' } };
+    default:
+      return state;
+  }
+};
 
-  const valueChangeHandler = (event) => {
-    setEnteredValue(event.target.value);
+const useInputs = (inputFields) => {
+  const initialState = inputFields.reduce((state, field) => {
+    return {...state, [field.fieldName]: initialInputState}
+  }, {});
+  
+  const [inputStates, dispatch] = useReducer(
+    inputStateReducer,
+    initialState
+  );
+
+  const valueChangeHandler = (fieldName) => (event) => {
+    dispatch({ type: 'INPUT', fieldName, value: event.target.value });
   };
 
-  const inputBlurHandler = () => {
-    setIsTouched(true);
+  const inputBlurHandler = (fieldName) => (event) => {
+    dispatch({ type: 'BLUR', fieldName });
   };
 
-  const reset = () => {
-    setEnteredValue("");
-    setIsTouched(false);
+  const reset = (fieldName) => () => {
+    dispatch({ type: 'RESET', fieldName });
   };
 
-  return {
-    value: enteredValue,
-    isValid: valueIsValid,
-    hasError,
-    valueChangeHandler,
-    inputBlurHandler,
-    reset,
-  };
-}
+  const fields = inputFields.map(({fieldName, validateValue}) => {
+    const state = inputStates[fieldName];
+    const isValid = validateValue(state.value);
+    const hasError = !isValid && state.isTouched;
+
+    return {
+      fieldName,
+      value: state.value,
+      isValid,
+      hasError,
+      valueChangeHandler: valueChangeHandler(fieldName),
+      inputBlurHandler: inputBlurHandler(fieldName),
+      reset: reset(fieldName),
+    };
+  });
+
+  const allValid = fields.every(field => field.isValid);
+
+  return { fields, allValid };
+};
+
+export default useInputs;

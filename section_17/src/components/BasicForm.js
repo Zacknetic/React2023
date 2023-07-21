@@ -1,91 +1,62 @@
-import React, { useState, useRef } from "react";
-import BasicInput from "./BasicInput";
+import React from 'react';
 
-const BasicForm = () => {
-  const [formIsValid, setFormIsValid] = useState(false);
-  const firstNameRef = useRef();
-  const lastNameRef = useRef();
-  const emailRef = useRef();
+import useInputs from '../hooks/use-input';
 
-  const validateName = (value) => {
-    return value.trim() !== "";
-  };
+const inputIsNotEmpty = (value) => value.trim() !== '';
+const inputIsValidEmail = (value) =>  value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+const inputIsValidDollarAmount = (value) => value.match(/^\d+(\.\d{2})?$/);
+const inputIsValidNumber = (value) => value.match(/^\d+$/);
+const inputIsValidPhone = (value) => value.match(/^\d{3}-\d{3}-\d{4}$/);
+const inputIsValidUSPostalCode = (value) => value.match(/^\d{5}(-\d{4})?$/);
+const inputIsValidURL = (value) => value.match(/^(ftp|http|https):\/\/[^ "]+$/);
+const inputIsValidInteger = (value) => value.match(/^\d+$/);
 
-  const validateEmail = (value) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(value);
-  };
+const formFields = [
+  { fieldName: "firstName", validateValue: inputIsNotEmpty, label: 'First Name', errorMessage: 'Please enter a first name.' },
+  { fieldName: "lastName", validateValue: inputIsNotEmpty, label: 'Last Name', errorMessage: 'Please enter a last name.' },
+  { fieldName: "email", validateValue: inputIsValidEmail, label: 'E-Mail Address', errorMessage: 'Please enter a valid email address.' }
+];
 
-  const formSubmissionHandler = (event) => {
+const BasicForm = (props) => {
+  const {fields, allValid} = useInputs(formFields);
+
+  const submitHandler = event => {
     event.preventDefault();
-    if (formIsValid) {
-      console.log("Submitted!");
-      firstNameRef.current.reset();
-      lastNameRef.current.reset();
-      emailRef.current.reset();
-      setFormIsValid(false);
+
+    if (!allValid) {
+      return;
     }
+
+    console.log('Submitted!');
+    fields.forEach(field => {
+      console.log(`${field.fieldName}: ${field.value}`);
+      field.reset();
+    });
   };
-
-  const firstNameInput = (
-    <BasicInput
-      id="firstname"
-      type="text"
-      label="First Name"
-      errorPrompt="First name is required"
-      validateValue={validateName}
-      onInputChange={(isValid) => {
-        setFormIsValid((prevFormIsValid) => {
-          return prevFormIsValid && isValid;
-        });
-      }}
-      ref={firstNameRef}
-    />
-  );
-
-  const lastNameInput = (
-    <BasicInput
-      id="lastname"
-      type="text"
-      label="Last Name"
-      errorPrompt="Last name is required"
-      validateValue={validateName}
-      onInputChange={(isValid) => {
-        setFormIsValid((prevFormIsValid) => {
-          return prevFormIsValid && isValid;
-        });
-      }}
-      ref={lastNameRef}
-    />
-  );
-
-  const emailInput = (
-    <BasicInput
-      id="email"
-      type="email"
-      label="E-Mail Address"
-      errorPrompt="Please enter a valid email"
-      validateValue={validateEmail}
-      onInputChange={(isValid) => {
-        setFormIsValid((prevFormIsValid) => {
-          return prevFormIsValid && isValid;
-        });
-      }}
-      ref={emailRef}
-    />
-  );
 
   return (
-    <form onSubmit={formSubmissionHandler}>
-      <div className="control-group">
-        {firstNameInput}
-        {lastNameInput}
+    <form onSubmit={submitHandler}>
+      <div className='control-group'>
+        {fields.map(({fieldName, value, hasError, valueChangeHandler, inputBlurHandler}, index) => {
+          const classes = hasError ? 'form-control invalid' : 'form-control';
+          const fieldProps = formFields.find(field => field.fieldName === fieldName);
+          return (
+            <div className={classes} key={index}>
+              <label htmlFor={fieldName}>{fieldProps.label}</label>
+              <input
+                type='text'
+                id={fieldName}
+                value={value}
+                onChange={valueChangeHandler}
+                onBlur={inputBlurHandler}
+              />
+              {hasError && <p className="error-text">{fieldProps.errorMessage}</p>}
+            </div>
+          )
+        })}
       </div>
-      {emailInput}
-      <div className="form-actions">
-        <button type="submit">
-          Submit
-        </button>
+      <div className='form-actions'>
+        <button disabled={!allValid}>Submit</button>
       </div>
     </form>
   );

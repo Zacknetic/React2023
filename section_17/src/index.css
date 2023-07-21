@@ -83,8 +83,8 @@ button:disabled,
 button:disabled:hover,
 button:disabled:active {
   background-color: #ccc;
+  color: #292929;
   border-color: #ccc;
-  color: #666;
   cursor: not-allowed;
 }
 
