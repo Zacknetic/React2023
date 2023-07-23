@@ -14,10 +14,21 @@ const inputIsValidInteger = (value) => value.match(/^\d+$/);
 const formFields = [
   { fieldName: "firstName", validateValue: inputIsNotEmpty, label: 'First Name', errorMessage: 'Please enter a first name.' },
   { fieldName: "lastName", validateValue: inputIsNotEmpty, label: 'Last Name', errorMessage: 'Please enter a last name.' },
-  { fieldName: "email", validateValue: inputIsValidEmail, label: 'E-Mail Address', errorMessage: 'Please enter a valid email address.' }
+  { fieldName: "email", validateValue: inputIsValidEmail, label: 'E-Mail Address', errorMessage: 'Please enter a valid email address.' },
+  { fieldName: "streetAddress", validateValue: inputIsNotEmpty, label: 'Street Address', errorMessage: 'Please enter a street address.' },
+  { fieldName: "city", validateValue: inputIsNotEmpty, label: 'City', errorMessage: 'Please enter a city.' },
+  { fieldName: "state", validateValue: inputIsNotEmpty, label: 'State', errorMessage: 'Please enter a state.' },
+  { fieldName: "zipCode", validateValue: inputIsValidUSPostalCode, label: 'Zip Code', errorMessage: 'Please enter a valid zip code.' },
+  { fieldName: "phoneNumber", validateValue: inputIsValidPhone, label: 'Phone Number', errorMessage: 'Please enter a valid phone number.' },
+  { fieldName: "website", validateValue: inputIsValidURL, label: 'Website', errorMessage: 'Please enter a valid website.' },
+  { fieldName: "age", validateValue: inputIsValidNumber, label: 'Age', errorMessage: 'Please enter a valid age.' },
+  { fieldName: "salary", validateValue: inputIsValidDollarAmount, label: 'Salary', errorMessage: 'Please enter a valid salary.' },
+  { fieldName: "yearsOfService", validateValue: inputIsValidInteger, label: 'Years of Service', errorMessage: 'Please enter a valid number of years of service.' },
+  
+
 ];
 
-const BasicForm = (props) => {
+const BasicForm = ({ onSubmit }) => {
   const {fields, allValid} = useInputs(formFields);
 
   const submitHandler = event => {
@@ -27,9 +38,14 @@ const BasicForm = (props) => {
       return;
     }
 
-    console.log('Submitted!');
+    const userData = fields.reduce((data, field) => {
+      data[field.fieldName] = field.value;
+      return data;
+    }, {});
+
+    onSubmit(userData);
+
     fields.forEach(field => {
-      console.log(`${field.fieldName}: ${field.value}`);
       field.reset();
     });
   };
