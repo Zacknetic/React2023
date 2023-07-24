@@ -44,6 +44,25 @@ const cartItemAddHandler = (item) => {
    setIsCheckout(true);
   };
 
+  // const submitOrderHandler = async (userData) => {
+  //   const response = await fetch(
+  //     "https://react-http-6a0e0-default-rtdb.firebaseio.com/orders.json",
+  //     {
+  //       method: "POST",
+  //       body: JSON.stringify({
+  //         user: userData,
+  //         orderedItems: cartCtx.items,
+  //       }),
+  //     }
+  //   );
+  //   if (!response.ok) {
+  //     throw new Error("Something went wrong!");
+  //   }
+  //   const responseData = await response.json();
+  //   console.log(responseData);
+  // };
+
+
   const modalActions = (
     <div className={classes.actions}>
     <button className={classes["button--alt"]} onClick={props.onClose}>
