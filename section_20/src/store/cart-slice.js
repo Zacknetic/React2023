@@ -1,11 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const cartSlice = createSlice({
-  name: "cart",
-  // The initial state is an object with three properties: items, totalQuantity, and changed.
-  // changed is a flag that indicates whether the cart has changed since the last time it was fetched from the database.
-  //when we update the cart in the database, we set changed to false.
-  initialState: { items: [], totalQuantity: 0, changed: false },
+  name: 'cart',
+  initialState: {
+    items: [],
+    totalQuantity: 0,
+    changed: false,
+  },
   reducers: {
     replaceCart(state, action) {
       state.totalQuantity = action.payload.totalQuantity;
@@ -26,7 +27,7 @@ const cartSlice = createSlice({
         });
       } else {
         existingItem.quantity++;
-        existingItem.totalPrice += newItem.price;
+        existingItem.totalPrice = existingItem.totalPrice + newItem.price;
       }
     },
     removeItemFromCart(state, action) {
@@ -38,7 +39,7 @@ const cartSlice = createSlice({
         state.items = state.items.filter((item) => item.id !== id);
       } else {
         existingItem.quantity--;
-        existingItem.totalPrice -= existingItem.price;
+        existingItem.totalPrice = existingItem.totalPrice - existingItem.price;
       }
     },
   },
