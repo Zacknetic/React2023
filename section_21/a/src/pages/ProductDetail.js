@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 
 export default function ProductDetailPage() {
@@ -10,7 +10,8 @@ export default function ProductDetailPage() {
 
   return (
     <>
-      <h1>All about {productId.toLocaleUpperCase()}</h1>    
+      <h1>All about {productId.toLocaleUpperCase()}</h1>   
+      <p><Link to=".." relative='path'>Back to Products</Link></p>
     </>
   );
 }

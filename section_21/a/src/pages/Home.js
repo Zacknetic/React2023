@@ -12,7 +12,7 @@ export default function HomePage() {
     <>
       <h1>My Home Page</h1>
       <p>
-        Go to <Link to="/products">/products</Link>
+        Go to <Link to="products">/products</Link>
       </p>
         {/* <button onClick={handleClick}>Go to /products</button> */}
     </>

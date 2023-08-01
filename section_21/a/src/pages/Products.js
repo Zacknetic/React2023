@@ -6,7 +6,7 @@ const PRODUCTS = [
     { productId: "p3", title: "An Online Course", price: 6, description: "Learn React!" },
     ];
 
-    const path = "/products"
+    // const path = "/products"
 
 export default function ProductsPage() {
   return (
@@ -15,7 +15,9 @@ export default function ProductsPage() {
         <ul>
             {PRODUCTS.map((product) => (
                 <li key={product.productId}>
-                    <Link to={`${path}/${product.productId}`}>{product.title}</Link>
+                    {/* <Link to={`${path}/${product.productId}`}>{product.title}</Link> */}
+                    <Link to={`${product.productId}`} relative="true">{product.title}</Link>
+
                 </li>
             ))}
         </ul>
