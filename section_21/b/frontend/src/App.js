@@ -29,21 +29,21 @@ import EditEventPage from "./pages/EditEvent";
 import RootLayout from "./pages/Root";
 import ErrorPage from "./pages/Error";
 
-const router = createBrowserRouter({
-  path: "/",
-  element: <RootLayout />,
-  errorElement: <ErrorPage />,
-  children: [
-    { index: true, element: <HomePage /> },
-    { path: "events", element: <EventsPage /> },
-    { path: "events/:eventId", element: <EventDetailPage /> },
-    { path: "events/new", element: <NewEventPage /> },
-    { path: "events/:eventId/edit", element: <EditEventPage /> },
-    { path: "*", element: <ErrorPage /> },
-  ],
-});
-
-
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: "events", element: <EventsPage /> },
+      { path: "events/:eventId", element: <EventDetailPage /> },
+      { path: "events/new", element: <NewEventPage /> },
+      { path: "events/:eventId/edit", element: <EditEventPage /> },
+      { path: "*", element: <ErrorPage /> },
+    ],
+  },
+]);
 
 function App() {
   return <RouterProvider router={router} />;
