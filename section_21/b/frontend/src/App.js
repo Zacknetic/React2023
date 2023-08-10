@@ -1,25 +1,25 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import HomePage from "./pages/Home";
-import EventsPage, { loader as eventsLoader } from "./pages/Events";
+import EditEventPage from './pages/EditEvent';
+import ErrorPage from './pages/Error';
 import EventDetailPage, {
   loader as eventDetailLoader,
-} from "./pages/EventDetail";
-import NewEventPage from "./pages/NewEvent";
-import EditEventPage from "./pages/EditEvent";
-import RootLayout from "./pages/Root";
-import ErrorPage from "./pages/Error";
-import EventsRootLayout from "./pages/EventsRoot";
+} from './pages/EventDetail';
+import EventsPage, { loader as eventsLoader } from './pages/Events';
+import EventsRootLayout from './pages/EventsRoot';
+import HomePage from './pages/Home';
+import NewEventPage from './pages/NewEvent';
+import RootLayout from './pages/Root';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <RootLayout />,
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
       {
-        path: "events",
+        path: 'events',
         element: <EventsRootLayout />,
         children: [
           {
@@ -28,21 +28,20 @@ const router = createBrowserRouter([
             loader: eventsLoader,
           },
           {
-            path: ":eventId",
-            id: "event-detail",
+            path: ':eventId',
+            id: 'event-detail',
             loader: eventDetailLoader,
             children: [
               {
                 index: true,
                 element: <EventDetailPage />,
               },
-              { path: ":eventId/edit", element: <EditEventPage /> },
+              { path: 'edit', element: <EditEventPage /> },
             ],
           },
-          { path: "new", element: <NewEventPage /> },
+          { path: 'new', element: <NewEventPage /> },
         ],
       },
-      { path: "*", element: <ErrorPage /> },
     ],
   },
 ]);
